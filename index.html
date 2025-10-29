@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Ansiedade — Compreenda, Acolha e Transforme</title>
+<style>
+:root{
+  --bg:#0f172a;
+  --panel:#0b1224ee;
+  --text:#e5e7eb;
+  --muted:#cbd5e1;
+  --brand:#22c55e;
+  --brand-2:#14b8a6;
+  --accent:#f59e0b;
+  --card:#111827;
+  --quote:#1f2937;
+  --ring:#334155;
+  --shadow: 0 10px 30px rgba(0,0,0,.35);
+  --radius: 18px;
+  --radius-sm: 12px;
+  --maxw: 1120px;
+}
+html,body{
+  margin:0;
+  padding:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,Helvetica,Arial;
+  overflow-x: hidden;
+  scroll-behavior:smooth;
+}
+.wrap{max-width:var(--maxw); margin:0 auto; padding:24px;}
+.hero{position:relative; padding:72px 24px 48px; text-align:center;}
+.badge{display:inline-flex; gap:8px; align-items:center; background:linear-gradient(90deg,#14532d,#0f766e); border:1px solid #064e3b; color:#d1fae5; padding:8px 14px; border-radius:999px; font-weight:600; font-size:14px; box-shadow:var(--shadow)}
+.title{font-size:clamp(48px,6vw,48px); line-height:1.05; margin:18px auto 12px; font-weight:800; letter-spacing:-.02em}
+.subtitle{max-width:840px; margin:0 auto 28px; color:var(--muted); font-size:clamp(28px,2.6vw,28px)}
+.cta-row{display:flex; align-items:center; justify-content:center; gap:12px; flex-wrap:wrap; margin-top:20px;}
+.btn{display:inline-flex; align-items:center; gap:10px; padding:14px 18px; border-radius:999px; font-weight:700; text-decoration:none; box-shadow:var(--shadow); border:1px solid transparent; cursor:pointer}
+.btn.primary{background:linear-gradient(135deg,var(--brand),var(--brand-2)); color:#052e2b}
+.btn.ghost{background:transparent; color:#e5e7eb; border-color:var(--ring)}
+.section{padding:48px 0}
+.section h2{font-size:clamp(24px,4.5vw,34px); margin:0 0 18px; letter-spacing:-.015em}
+#capitulos-title{padding-left: 24px;}
+#download-title {padding-left: 24px;}
+#download-text {padding-left: 24px; padding-right: 24px;}
+.grid{display:grid; grid-template-columns:1fr; gap:16px}
+@media (min-width:700px){ .grid{grid-template-columns:repeat(2,1fr);} }
+@media (min-width:980px){ .grid{grid-template-columns:repeat(4,1fr);} }
+.card{background:linear-gradient(180deg,#0b1224cc,#0b1224fa); border:1px solid var(--ring); border-radius:var(--radius); padding:18px; min-height:200px; position:relative; overflow:hidden}
+.card h3{margin:6px 0 8px; font-size:18px}
+.card p{margin:0 0 14px; color:var(--muted); font-size:15px}
+.card .chip{display:inline-flex; align-items:center; gap:8px; font-size:12px; color:#a7f3d0; background:#064e3b; padding:6px 10px; border-radius:999px; border:1px solid #10b981}
+.quotes{display:grid; gap:14px}
+@media (min-width:900px){ .quotes{grid-template-columns:1fr 1fr;} }
+.panel{background:linear-gradient(180deg,var(--panel),#0b1224); border:1px solid var(--ring); border-radius:var(--radius); padding:26px; box-shadow:var(--shadow);box-sizing: border-box;width: 100%}
+.social-link {text-align: center;}
+.social-link a {text-decoration: none;font-weight: bold;color: #4a90e2;font-size: 16px;transition: color 0.3s ease;}
+.social-link a:hover {color: #2c3e50;}
+.about { display: flex; align-items: flex-start; justify-content: space-between; gap: 40px; margin-top: 20px; flex-wrap: wrap; }
+.about-text { flex: 1; min-width: 280px; text-align: grid; }
+.about-image { flex: 1; min-width: 280px; display: flex; justify-content: flex-start; flex-direction: column; align-items: center }
+.about-image img { max-width: 200px; width: 100%; border-radius: 12px; margin-top: -50px; box-shadow: 0px 4px 15px rgba(0,0,0,0.2);} .about-image img {
+  max-width: 200px;
+  width: 100%;
+  border-radius: 12px;
+  margin-top: -50px;
+  box-shadow: 0px 4px 15px rgba(0,0,0,0.2);
+}
+
+@media (max-width: 700px) {
+  .about-image {
+    align-items: center; /* Centraliza tudo no mobile */
+  }
+  .about-image img {
+    margin-top: 0px;
+  }
+  .about-image a {
+    margin-top: 10px;
+    display: inline-block;
+  }
+}
+
+.about .lead{font-size:18px; color:var(--muted)}
+.cta-big{margin-top:10px; display:flex; gap:10px; flex-wrap:wrap}
+.foot{padding:28px 0 0; color:#9ca3af; text-align:center}
+.foot a{color:#a7f3d0; text-decoration:none}
+.muted{color:var(--muted)}
+/* TRECHOS EXPANSÍVEIS COM ZOOM E DESTAQUE TERAPÊUTICO */
+.trecho{
+  display:none;
+  margin-top:12px;
+  padding:18px;
+  background:linear-gradient(180deg,#0e162b,#0c1427);
+  border-radius:20px;
+  border:2px solid #334155;
+  box-shadow:0 8px 20px rgba(0,0,0,0.3);
+  transform:scale(0.97);
+  transition: all 0.35s ease, box-shadow 0.35s ease, border 0.35s ease;
+  position: relative;
+}
+.trecho.active{
+  display:block;
+  transform:scale(1);
+  border:2px solid #22c55e;
+  box-shadow:0 15px 30px rgba(34,197,94,0.6), 0 0 15px rgba(34,197,94,0.4) inset;
+}
+.trecho.active::before{
+  content:''; position:absolute; top:-4px; left:-4px; right:-4px; bottom:-4px;
+  border-radius:22px;
+  border:2px solid rgba(34,197,94,0.5);
+  box-shadow:0 0 15px rgba(34,197,94,0.5),0 0 25px rgba(34,197,94,0.3) inset;
+  animation: pulse 2s infinite alternate;
+}
+@keyframes pulse {
+  0% {
+    opacity: 0.3;
+    box-shadow: 0 0 10px rgba(34,197,94,0.4),
+                0 0 15px rgba(34,197,94,0.2) inset;
+  }
+  100% {
+    opacity: 0.6;
+    box-shadow: 0 0 25px rgba(34,197,94,0.6),
+                0 0 35px rgba(34,197,94,0.3) inset;
+  }
+}
+
+/* AGORA sim o media query separado */
+@media (max-width: 700px) {
+  .panel {
+    margin-left: 12px;
+    margin-right: 12px;
+    width: auto;
+  }
+}
+
+/* Ajustes para celulares mais estreitos */
+@media (max-width: 480px) {
+  #download-title,
+  #download-text {
+    padding-left: 12px;   
+    padding-right: 12px;  
+    text-align: left;   
+  }
+
+  .btn {
+    padding: 10px 14px;   
+    font-size: 14px;      
+  }
+
+  .cta-row {
+    flex-direction: column; 
+    gap: 8px;
+  }
+}
+</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+<header class="hero">
+<div class="wrap">
+  <h1 class="title">Decodificando a Ansiedade:</h1>
+  <p class="subtitle"><strong>compreenda, acolha e transforme</strong></p>
+  <p class="subtitle-secondary">Um guia prático e humano para entender a ansiedade, acolher as emoções e criar rotas de equilíbrio no dia a dia.</p>
+  <div class="cta-row">
+    <a href="#" data-scroll="#download" class="btn primary"> Iniciar sua transformação</a>
+    <a href="#" data-scroll="#capitulos" class="btn ghost">🔎 Explorar capítulos ▸</a>
+  </div>
+</div>
+</header>
+<main>
+<section class="section wrap panel" id="sobre">
+<h2>Sobre este livro</h2>
+<p class="lead">Este livro não foi feito para apontar erros, mas para <strong>acolher</strong>. Cada capítulo é um convite para compreender melhor suas emoções, reconhecer os sinais da ansiedade e transformar desafios em aprendizado. Ele aprofunda a visão sobre a ansiedade, mostrando não apenas sintomas e técnicas, mas suas raízes biológicas, psicológicas e traumáticas. Traz neurociência (neuroplasticidade), filosofia (Agostinho, Marco Aurélio), metafísica e até física quântica, sempre conectando com o reprocessamento generativo. A cada capítulo, o texto oferece não só explicação, mas também exercícios práticos (como protocolos, perguntas reflexivas, micro-hábitos, rituais). A linguagem é acolhedora, evita julgamentos e mostra que a ansiedade não é uma condenação, mas um portal para sua transformação.</p>
+</section>
+<section class="section wrap" id="capitulos">
+<h2 id="capitulos-title">Explore os capítulos</h2>
+<div class="grid">
+<!-- 10 CAPÍTULOS COM TRECHOS EXPANSÍVEIS -->
+<article class="card">
+<span class="chip">Capítulo 1</span>
+<h3>De onde nasce a ansiedade?</h3>
+<p>A ansiedade nasce do encontro entre corpo, mente e história. Reconheça raízes, gatilhos e caminhos de cuidado.</p>
+<button class="btn ghost toggle-trecho">🔎 Ler um trecho ▸</button>
+<div class="trecho"><p>“Antes de podermos transformar a ansiedade, precisamos entendê-la em sua raiz. A ansiedade não surge de repente, como um visitante inesperado que bate à porta sem motivo. Ela é o resultado de uma combinação complexa entre corpo, mente, história de vida e até mesmo herança genética. Conhecer essa origem é como <strong>acender uma luz</strong> em um quarto escuro: aquilo que antes parecia ameaçador começa a ser reconhecido, compreendido e, por fim, <strong>transformado</strong>.”</p></div>
+</article>
+<article class="card">
+<span class="chip">Capítulo 2</span>
+<h3>A ansiedade como linguagem</h3>
+<p>O corpo fala por sinais. Aprenda a escutar os sintomas sem medo e a responder com acolhimento.</p>
+<button class="btn ghost toggle-trecho">🔎 Ler um trecho ▸</button>
+<div class="trecho"><p>“A ansiedade não fala com palavras. Ela fala através de sintomas, sensações e pensamentos. Um coração acelerado, um nó no estômago, uma mente que não para. Cada um desses sinais é uma tentativa do corpo de comunicar algo que ainda não foi compreendido.”</p></div>
+</article>
+<article class="card">
+<span class="chip">Capítulo 3</span>
+<h3>Ansiedade e o fluxo da vida</h3>
+<p>No ritmo da vida moderna, transforme frustração em presença e escolha consciente.</p>
+<button class="btn ghost toggle-trecho">🔎 Ler um trecho ▸</button>
+<div class="trecho"><p>“A mente ansiosa tem um padrão: interpretar cada frustração como um sinal de fracasso pessoal. Pequenas situações do dia tornam-se evidências de que <i>“não sou capaz”</i>, <i>“nada dá certo para mim”</i>, <i>“não vou conseguir”</i>. Essa interpretação cria um estado constante de luta interna. Mas, do ponto de vista terapêutico, cada frustração é um portal de <strong>aprendizado</strong>. O que realmente causa sofrimento não é o evento em si, mas a <strong>forma</strong> como o interpretamos e o <strong>significado</strong> que damos a ele.”</p></div>
+</article>
+<article class="card">
+<span class="chip">Capítulo 4</span>
+<h3>A Construção de hábitos que regeneram</h3>
+<p>Rotinas gentis, autoperdão e constância criam novas rotas neuronais de calma.</p>
+<button class="btn ghost toggle-trecho">🔎 Ler um trecho ▸</button>
+<div class="trecho"><p>“A ansiedade costuma prosperar em mentes que vivem no piloto automático, presas em padrões repetitivos de preocupação, comparação e autocobrança. Por isso, criar hábitos que regeneram significa <strong>treinar</strong> o cérebro para sair desses ciclos e construir novas respostas, mais conscientes e compassivas.”</p></div>
+</article>
+<article class="card">
+<span class="chip">Capítulo 5</span>
+<h3>Transformando a ansiedade em energia criativa</h3>
+<p>Canalize a energia da ansiedade para foco, criatividade e ação alinhada.</p>
+<button class="btn ghost toggle-trecho">🔎 Ler um trecho ▸</button>
+<div class="trecho"><p>“A ansiedade carrega <strong>energia</strong>. <strong>Biologicamente</strong>, ela mobiliza o corpo para agir; <strong>Psicologicamente</strong>, ela sinaliza que algo precisa de ajuste; <strong>Existencialmente</strong>, ela aponta para um vazio de sentido. Quando só tentamos “<i>desligar</i>” esse alarme, perdemos combustível. Quando <strong>decodificamos</strong> e direcionamos essa energia, ela vira foco, coragem e criação. Este capítulo mostra como transmutar a ativação ansiosa em movimento <strong>criativo</strong>, com passos claros, exemplos do dia a dia e práticas que reprogramam o cérebro (neuroplasticidade) de dentro para fora.”</p></div>
+</article>
+<article class="card">
+<span class="chip">Capítulo 6</span>
+<h3>Ansiedade existencial moderna</h3>
+<p>Entre excesso de estímulos e comparações, recupere o que é essencialmente seu.</p>
+<button class="btn ghost toggle-trecho">🔎 Ler um trecho ▸</button>
+<div class="trecho"><p>“Durante séculos, a humanidade se debruçou sobre uma grande questão: “<i>De onde viemos e para onde vamos?</i>”. Essa pergunta metafísica conduziu filósofos, religiosos, cientistas e buscadores espirituais. Era uma inquietação que, ainda que profunda e complexa, apontava para um sentido maior de existência. Hoje, no entanto, vivemos uma mudança silenciosa. A pergunta que inquietava a humanidade parece ter se perdido, e o que permanece é um vazio mais imediato: “<i>Quem eu sou agora?</i>”.”</p></div>
+</article>
+<article class="card">
+<span class="chip">Capítulo 7</span>
+<h3>Propósito e energia criativa</h3>
+<p>Conectar-se ao propósito pacifica a mente e dá direção à sua energia.</p>
+<button class="btn ghost toggle-trecho">🔎 Ler um trecho ▸</button>
+<div class="trecho"><p>“<strong>Ansiedade é excesso de futuro sem forma. Propósito é futuro com direção.</strong> Quando a pessoa encontra um “<i>para quê</i>” maior, o cérebro deixa de disparar alarme caótico e passa a organizar os recursos internos para agir com coerência. Traduzindo de maneira terapêutica, isso quer dizer que a energia deixa de corroer e passa a sustentar. De maneira prática, significa que cada ação cotidiana vira ensaio do projeto maior.”</p></div>
+</article>
+<article class="card">
+<span class="chip">Capítulo 8</span>
+<h3>O peso das imposições externas</h3>
+<p>Solte padrões inalcançáveis e reencontre seu próprio ritmo.</p>
+<button class="btn ghost toggle-trecho">🔎 Ler um trecho ▸</button>
+<div class="trecho"><p>“O ser humano nasce <strong>original</strong>. Mas ao longo da vida, crenças limitantes se acumulam como camadas de poeira sobre a essência: "<i>Não posso.</i>", "<i>Não sei.</i>", "<i>Não sou capaz.</i>", "<i>Não mereço.</i>". Essas frases moldam um eu diminuído, que vive em função da aprovação alheia, mas não reconhece a própria <strong>trajetória</strong>. Na terapia, trabalhamos para voltar à <strong>raiz</strong> da ferida: <strong>Identificar</strong> em que momento a crença ou imposição foi plantada; <strong>Reprocessar</strong> o evento com novas redes neurais, liberando a emoção presa; <strong>Regenerar</strong> a narrativa, permitindo que a pessoa escolha de novo — agora a partir da própria essência. Esse é o movimento de <strong>restaurar</strong> a originalidade perdida.”</p></div>
+</article>
+<article class="card">
+<span class="chip">Capítulo 9</span>
+<h3>Reconstruindo a originalidade</h3>
+<p>Curar-se é lembrar quem você é, sem precisar vencer a si mesmo.</p>
+<button class="btn ghost toggle-trecho">🔎 Ler um trecho ▸</button>
+<div class="trecho"><p>“Todos nós temos dentro de nós uma essência <strong>única</strong>, um jeito de ver, sentir e agir que nos pertence. Com o tempo, traumas, cobranças externas e expectativas alheias vão apagando essa luz. O resultado é uma vida fragmentada, cheia de pressões, ansiedades e um sentimento constante de não ser suficiente. Este capítulo mostra como resgatar essa originalidade de forma prática e contínua, tanto na rotina diária quanto nas relações com os outros, sem perder a leveza, a consciência e a responsabilidade.”</p></div>
+</article>
+<article class="card">
+<span class="chip">Capítulo 10</span>
+<h3>Acolhendo-se e construindo sua vida</h3>
+<p>Compromisso gentil com o processo: um passo de cada vez, com presença.</p>
+<button class="btn ghost toggle-trecho">🔎 Ler um trecho ▸</button>
+<div class="trecho"><p>“Você pode olhar para sua própria vida e perceber momentos em que se moldou demais às expectativas alheias, se calou, se reprimiu ou se sentiu perdido. <strong>Isso não significa que você errou.</strong> Significa apenas que aprendeu lições essenciais, mesmo que de forma dolorosa. Cada aprendizado assim é como uma peça de um quebra-cabeça que você vai montando, construindo uma <strong>identidade</strong> mais consciente e autêntica.”</p></div>
+</article>
+</div>
+</section>
+<section class="section wrap panel" id="autor">
+<h2>Sobre o autor</h2>
+<div class="about">
+<div class="about-text">
+<p class="lead">Sou <strong>Wagner Matos</strong>, terapeuta em <strong>Reprocessamento Generativo</strong>. Escrevi o e-book ‘Decodificando a Ansiedade’ não apenas para explicar o que é a ansiedade, mas para revelar que ela é um sinal: um pedido do seu corpo e da sua mente para que você olhe para memórias, experiências e padrões que ainda precisam ser curados. Meu propósito é transformar sua relação com a ansiedade e iniciar sua jornada de cura interna.</p>
+<div class="cta-big">
+  <a href="https://sites.google.com/view/wagnermatosterapeuta/transforma%C3%A7%C3%A3o-consistente" target="_blank" class="btn primary"> Iniciar Reprocessamento</a>
+  <a href="#" data-scroll="#contato" class="btn ghost"> Falar comigo</a>
+</div>
+</div>
+<div class="about-image">
+  <div style="margin-top:10px; text-align:center;">
+    <!-- Foto -->
+    <img src="https://i.ibb.co/qLnjrXFJ/wagner2.png" alt="Foto de Wagner Matos" />
+    
+    <!-- Link do Instagram embaixo da foto -->
+    <div style="margin-top:12px;">
+      <a href="https://www.instagram.com/wagnermatosterapeuta" target="_blank" class="btn ghost">
+		<i class="fab fa-instagram"></i> WagnerMatosTerapeuta
+      </a>
+    </div>
+  </div>
+</div>
+
+</section>
+<section class="section wrap panel" id="download">
+<h2 id="download-title">1° passo para sua transformação</h2>
+<p id="download-text" class="muted">Se este conteúdo fez sentido para você, dê o primeiro passo rumo à sua transformação. Neste ebook, você encontrará reflexões e caminhos que vão iluminar sua jornada interior, ajudando a compreender melhor suas emoções e a enxergar novas possibilidades. Foi preparado com cuidado para que você se sinta acompanhado(a) em cada página, no seu próprio ritmo. Clique no botão abaixo e garanta já o seu exemplar.</p>
+<div class="cta-row">
+<a class="btn primary" href="https://sites.google.com/view/wagnermatosterapeuta/transforma%C3%A7%C3%A3o-consistente" target="_blank" rel="noopener">Guia Transformador</a>
+<a href="#" data-scroll="#sobre" class="btn ghost">↑ Voltar ao topo</a>
+</div>
+</section>
+<section class="section wrap panel" id="contato">
+<h2 id="download-title">2° passo para sua transformação</h2>
+<p id="download-text" class="lead">Quer explorar profundamente o universo da sua mente? Por vezes caótica e cheia de mistérios, mas ela é só sua — guardando não apenas traumas, medos e confusões que alimentam a ansiedade, mas também lembranças preciosas e experiências valiosas. Com o apoio certo, essas vivências podem se transformar em combustível para ressignificar o passado, regenerar o presente e construir as bases de um futuro promissor, caminhando com clareza e coragem rumo à vida que você merece. Vou estar ao seu lado nessa jornada, pois ela não precisa ser solitária. Vamos juntos nessa jornada? Agende sua sessão no botão abaixo e descubra como a terapia de Reprocessamento Generativo pode ser um espaço seguro para você se reconectar consigo mesmo.</p>
+<div class="cta-row">
+<a class="btn primary" href="https://loja.infinitepay.io/wagner-christian-matos/eqm2348-5-sessoes-terapeuticas-cada-encontro-50-mi" target="_blank" rel="noopener"> Agendar </a>
+<a href="mailto:wagnermatosterapeuta@gmail.com" class="btn ghost">
+  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#e5e7eb" viewBox="0 0 24 24" style="margin-right:6px; vertical-align:middle;">
+    <path d="M20 4H4C2.897 4 2 4.897 2 6v12c0 1.103.897 2 2 2h16c1.103 0 2-.897 2-2V6c0-1.103-.897-2-2-2zm0 2v.511l-8 5.001-8-5.001V6h16zM4 18V8.489l7.386 4.616a1 1 0 0 0 1.228 0L20 8.489V18H4z"/>
+  </svg>
+  Email
+</a>
+<a class="btn ghost" href="https://wa.me/5515991635709?text=Olá!%20Wagner,%20venho%20do%20site%20e%20quero%20saber%20mais%20sobre%20a%20terapia%20de%20Reprocessamento%20Generativo." target="_blank">
+<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#25D366" viewBox="0 0 24 24" style="margin-right:6px; vertical-align:middle;">
+<path d="M20.52 3.48A11.9 11.9 0 0012 .5C5.65.5.5 5.65.5 12a11.9 11.9 0 001.99 6.53L0 24l5.6-1.49A11.9 11.9 0 0012 23.5c6.35 0 11.5-5.15 11.5-11.5a11.9 11.9 0 00-3.98-8.52zm-8.52 18c-1.87 0-3.68-.5-5.25-1.43l-.38-.23-3.32.88.88-3.25-.24-.38A9.487 9.487 0 012.5 12c0-5.24 4.26-9.5 9.5-9.5s9.5 4.26 9.5 9.5-4.26 9.5-9.5 9.5zm5.24-7.82c-.28-.14-1.65-.81-1.9-.91-.25-.1-.44-.14-.63.14s-.72.91-.88 1.1c-.16.18-.31.2-.58.07-.28-.14-1.18-.43-2.24-1.38-.83-.74-1.39-1.66-1.55-1.92-.16-.25-.02-.38.12-.51.12-.12.28-.31.42-.47.14-.16.19-.27.28-.45.09-.18.04-.34-.02-.48-.07-.14-.63-1.52-.87-2.08-.23-.55-.47-.48-.63-.49-.16-.01-.34-.01-.52-.01-.18 0-.48.07-.73.34-.25.27-.95.93-.95 2.27s.97 2.63 1.11 2.81c.14.18 1.92 2.92 4.66 4.1.65.28 1.15.45 1.54.57.65.2 1.24.17 1.71.1.52-.08 1.65-.67 1.88-1.32.23-.65.23-1.2.16-1.32-.07-.12-.25-.18-.52-.32z"/>
+</svg>What's App
+</a>
+</div>
+</section>
+</main>
+<footer class="foot wrap">
+<div>© <span id="year"></span> • <strong>Wagner Matos</strong>. Todos os direitos reservados.</div>
+</footer>
+<script>
+// Ano automático
+document.getElementById('year').textContent = new Date().getFullYear();
+
+// Scroll suave para links
+document.querySelectorAll('[data-scroll]').forEach(link=>{
+  link.addEventListener('click',e=>{
+    e.preventDefault();
+    const target=document.querySelector(link.getAttribute('data-scroll'));
+    if(target) target.scrollIntoView({behavior:"smooth"});
+  });
+});
+
+// Trechos expansíveis (sem scroll automático nos capítulos)
+document.querySelectorAll(".toggle-trecho").forEach(btn=>{
+  btn.addEventListener("click",()=>{
+    const card=btn.closest(".card");
+    const trecho=card.querySelector(".trecho");
+    // fecha outros
+    document.querySelectorAll(".trecho").forEach(t=>{
+      if(t!==trecho) t.classList.remove("active");
+    });
+    // apenas alterna visibilidade — sem scrollIntoView
+    trecho.classList.toggle("active");
+  });
+});
+</script>
+</body>
+</html>
