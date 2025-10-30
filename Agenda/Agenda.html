@@ -1,0 +1,198 @@
+<!-- Bibliotecas necessárias -->
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
+
+<!-- Plugin jQuery Mask -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
+
+<style>
+  body { font-family: Arial, sans-serif; padding: 20px; }
+  .form-container {
+   max-width: 700px;
+   margin: 30px auto;
+   padding: 25px;
+   border-radius: 12px;
+   background: #ffffff; 
+   box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+  }
+  h2 { text-align: center; color: #1a73e8; margin-bottom: 20px; }
+  label { font-weight: bold; margin-top: 12px; display: block; color: #333; }
+  input[type="text"], input[type="email"], input[type="tel"] { width: 100%; padding: 10px; margin: 6px 0; border-radius: 6px; border: 1px solid #ccc; font-size: 16px; }
+  .datepicker { cursor: pointer; background: #e3f2fd; }
+  .horarios-container {
+  display: flex;
+  flex-wrap: wrap;  /* permite quebrar linha se não couber */
+  gap: 8px;         /* espaço entre os botões */
+  margin-top: 12px;
+}
+
+.horarios-container button {
+  flex: 1 1 30%;      /* tenta ocupar ~30% da linha */
+  min-width: 80px;    /* largura mínima para caber o texto */
+  padding: 8px 10px;
+  border: none;
+  border-radius: 6px;
+  background: #bbdefb;
+  color: #1a73e8;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.horarios-container button.selected {
+  background: #1a73e8;
+  color: #fff;
+}
+
+.horarios-container button.ocupado {
+  background: #e0e0e0;
+  color: #888;
+  text-decoration: line-through;
+  cursor: not-allowed;
+} 
+  .selected-days { margin-top: 18px; background: #e8f5e9; padding: 12px; border-radius: 6px; color: #2e7d32; }
+  .selected-days ul { list-style-type: none; padding-left: 0; }
+  .selected-days li { margin: 5px 0; }
+  button.submit-btn { margin-top: 20px; padding: 12px 22px; background: #1a73e8; color: #fff; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; width: 100%; transition: 0.3s; }
+  button.submit-btn:hover { background: #155ab6; }
+  @media(max-width: 320px){
+  .horarios-container button {
+    flex: 1 1 100%;
+  }
+}
+</style>
+
+<div class="form-container">
+  <h2>Agendamento Online</h2>
+  <form id="agendamentoForm" action="https://formspree.io/f/xdkworvk" method="POST">
+    
+    <label for="nome">Nome:</label>
+    <input type="text" id="nome" name="nome" required>
+    
+    <label for="whatsapp">WhatsApp:</label>
+    <input type="tel" id="whatsapp" name="whatsapp" placeholder="(99) 99999-9999" required>
+
+    <label for="email">E-mail:</label>
+    <input type="email" id="email" name="email" required>
+
+    <label for="dia">Escolha o dia:</label>
+    <input type="text" id="dia" class="datepicker" readonly placeholder="Clique para escolher o dia">
+
+    <div class="horarios-container" id="horarios">
+      <label>Horários disponíveis:</label><br>
+    </div>
+
+    <div class="selected-days" id="selectedDays">
+      <strong>Dias e horários selecionados:</strong>
+      <ul id="daysList"></ul>
+    </div>
+
+    <input type="hidden" name="agendamento" id="agendamentoData">
+    <button type="submit" class="submit-btn">Enviar</button>
+  </form>
+</div>
+
+<script>
+  // Máscara automática para WhatsApp
+  $(document).ready(function(){
+    $('#whatsapp').mask('(00) 00000-0000');
+  });
+
+  let agendamentos = {};
+
+  // Simulando horários ocupados
+  let horariosOcupados = {
+    "23/09/2025": ["08:00"],
+    "24/09/2025": ["10:00","14:00"],
+    "25/09/2025": ["11:00"]
+  };
+
+  // Configuração calendário em português
+  $.datepicker.regional['pt-BR'] = {
+      closeText: 'Fechar',
+      prevText: 'Anterior',
+      nextText: 'Próximo',
+      currentText: 'Hoje',
+      monthNames: ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'],
+      monthNamesShort: ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'],
+      dayNames: ['Domingo','Segunda','Terça','Quarta','Quinta','Sexta','Sábado'],
+      dayNamesShort: ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'],
+      dayNamesMin: ['Do','Se','Te','Qa','Qi','Se','Sa'],
+      weekHeader: 'Sm',
+      dateFormat: 'dd/mm/yy',
+      firstDay: 0,
+      isRTL: false,
+      showMonthAfterYear: false,
+      yearSuffix: ''
+  };
+  $.datepicker.setDefaults($.datepicker.regional['pt-BR']);
+
+  $(function() {
+    $(".datepicker").datepicker({
+      minDate: 0,
+      beforeShowDay: function(date) {
+          const day = date.getDay();
+          if(day === 0) return [false, "", "Domingo indisponível"];
+          return [true, "", ""];
+      },
+      onSelect: function(dateText) {
+        loadHorarios(dateText);
+      }
+    });
+  });
+
+  function loadHorarios(date){
+    const container = $("#horarios");
+    container.find("button").remove();
+
+    const partes = date.split("/");
+    const dataObj = new Date(partes[2], partes[1]-1, partes[0]);
+    const diaSemana = dataObj.getDay();
+
+    let horariosParaDia = [];
+    if(diaSemana === 6){
+        horariosParaDia = ["08:00","09:00","10:00","11:00","12:00"];
+    } else {
+        horariosParaDia = ["08:00","09:00","10:00","11:00","12:00","14:00","15:00","16:00","17:00","18:00","19:00","20:00"];
+    }
+
+    horariosParaDia.forEach(h => {
+      const btn = $("<button type='button'>"+h+"</button>");
+      if(horariosOcupados[date] && horariosOcupados[date].includes(h)){
+        btn.addClass("ocupado");
+        btn.prop("disabled", true);
+      }
+      if(agendamentos[date] && agendamentos[date].includes(h)) btn.addClass("selected");
+      btn.on("click", function(){
+        if($(this).hasClass("ocupado")) return;
+        $(this).toggleClass("selected");
+        if(!agendamentos[date]) agendamentos[date] = [];
+        if($(this).hasClass("selected")){
+          agendamentos[date].push(h);
+        } else {
+          agendamentos[date] = agendamentos[date].filter(x => x !== h);
+        }
+        updateSelectedDays();
+      });
+      container.append(btn);
+    });
+  }
+
+  function updateSelectedDays(){
+    const list = $("#daysList");
+    list.empty();
+    for(let dia in agendamentos){
+      if(agendamentos[dia].length > 0){
+        list.append("<li>"+dia+": "+agendamentos[dia].join(", ")+"</li>");
+      }
+    }
+    $("#agendamentoData").val(JSON.stringify(agendamentos));
+  }
+
+  $("#agendamentoForm").on("submit", function(){
+    if(Object.keys(agendamentos).length === 0){
+      alert("Escolha pelo menos um dia e horário antes de enviar!");
+      return false;
+    }
+  });
+</script>
